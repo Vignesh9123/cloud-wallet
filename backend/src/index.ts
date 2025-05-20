@@ -1,16 +1,18 @@
 import express from 'express'
 import { User } from './models/user.model'
-import {Keypair} from '@solana/web3.js'
+import {Connection, Keypair, Transaction} from '@solana/web3.js'
 import mongoose from 'mongoose'
 import bs58 from 'bs58'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
+import cors from 'cors'
 const app = express()
 
 dotenv.config()
 
 app.use(express.json())
+app.use(cors())
 
 const connectToDb = async()=>{
     try {
@@ -91,7 +93,20 @@ app.post("/signin", async(req, res)=>{
     }   
 })
 
-app.post("/sign-txn", async(req, res)=>{})
+app.post("/sign-txn", async(req, res)=>{
+    const {serializedTxn} = req.body
+    const connection = new Connection("https://api.devnet.solana.com")
+    const transaction = Transaction.from(Buffer.from(serializedTxn, "base64"))
+    const signer = Keypair.fromSecretKey(bs58.decode(process.env.PRIVATE_KEY!)) // TODO:user.privateKey 
+    const signature = await connection.sendTransaction(transaction,[signer],{
+        skipPreflight: true,
+        maxRetries: 3
+    })
+    res.status(200).json({
+        message:"Transaction signed successfully",
+        signature
+    })
+})
 app.listen(3000, async()=>{
     await connectToDb()
     console.log("Server running on port 3000")
