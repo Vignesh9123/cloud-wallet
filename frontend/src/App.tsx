@@ -1,13 +1,13 @@
-import { useState } from "react"
 import { Connection, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction } from "@solana/web3.js"
 import axios from "axios"
-
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
+import Home from "./components/Home"
+import { ThemeProvider } from "./context/theme-context"
+import Signup from "./components/Signup"
+import Signin from "./components/Signin"
+import { Toaster } from "sonner"
 function App() {
-  const [isDark, setIsDark] = useState(true)
-  const onToggleClick = () => {
-    document.getElementsByTagName("html")[0].classList.toggle("dark")
-    setIsDark(!isDark)
-  }
+
 
   const sendTxnToBackend = async ()=>{
     const connection = new Connection("https://api.devnet.solana.com")
@@ -29,16 +29,16 @@ function App() {
   }
 
   return (
-    <div className="">
-      <button onClick={()=>onToggleClick()}>{isDark ? "Light" : "Dark"}</button>
-      <div>
-        <button onClick={() => {
-          sendTxnToBackend()       
-        }}>
-          Send Transaction
-        </button>
-      </div>
-    </div>
+    <ThemeProvider>
+      <Router>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/sign-up" element={<Signup />} />
+      <Route path="/sign-in" element={<Signin />} />
+    </Routes>
+   </Router>
+   <Toaster />
+    </ThemeProvider>
   )
 }
 
