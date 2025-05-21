@@ -11,25 +11,6 @@ import SendSolPage from "./components/SendSolPage"
 function App() {
 
 
-  const sendTxnToBackend = async ()=>{
-    const connection = new Connection("https://api.devnet.solana.com")
-    const {blockhash} = await connection.getLatestBlockhash()
-    const transaction = new Transaction().add(
-      SystemProgram.transfer({
-        fromPubkey: new PublicKey("9Qj3Su5uijFa6NPqHHRrRiFfJ8oKTZMjHqDQQ7oeJkwN"),
-        toPubkey: new PublicKey("6GrHdFDmyR2ozzcbckH37XZufrVKkDhgSEofcyVnjubX"),
-        lamports: LAMPORTS_PER_SOL
-      })
-    )
-    transaction.recentBlockhash = blockhash
-    transaction.feePayer =  new PublicKey("9Qj3Su5uijFa6NPqHHRrRiFfJ8oKTZMjHqDQQ7oeJkwN")
-    const serializedTxn = transaction.serialize({
-      requireAllSignatures: false,
-      verifySignatures: false
-    })
-    await axios.post("http://localhost:3000/sign-txn", {serializedTxn})
-  }
-
   return (
     <ThemeProvider>
       <Router>
