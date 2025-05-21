@@ -1,18 +1,27 @@
-import axios from "axios"
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
 import {toast} from "sonner"
 import { useNavigate } from "react-router-dom"
+import { useAuth } from "@/context/auth-context"
 
 function Signin() {
   const navigate = useNavigate()
+  const {login} = useAuth()
     const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
         try {
             e.preventDefault()
             const formData = new FormData(e.target as HTMLFormElement)
             const email = formData.get("email")?.toString().toLowerCase()
-            const password = formData.get("password")
-            const response = await axios.post("http://localhost:3000/signin", { email, password })
+            if(!email){
+                toast.error("Please enter an email")
+                return
+            }
+            const password = formData.get("password")?.toString()
+            if(!password){
+                toast.error("Please enter a password")
+                return
+            }
+            const response = await login(email, password)
             console.log(response)
             toast.success("Signed in Successfully")
             navigate("/dashboard")

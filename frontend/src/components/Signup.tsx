@@ -1,17 +1,28 @@
 import React from 'react'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
-import axios from 'axios'
 import { toast } from 'sonner'
-
+import { useAuth } from '@/context/auth-context'
 function Signup() {
+
+  const {signup} = useAuth()
     const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
         try {
             e.preventDefault()
             const formData = new FormData(e.target as HTMLFormElement)
             const email = formData.get("email")?.toString().toLowerCase()
-            const password = formData.get("password")
-            const response = await axios.post("http://localhost:3000/signup", { email, password })
+            const password = formData.get("password")?.toString()
+
+            if(!email){
+                toast.error("Please enter an email")
+                return
+            }
+            if(!password){
+                toast.error("Please enter a password")
+                return
+            }
+            const response = await signup(email, password)
+
             console.log(response)
             toast.success("Signed up Successfully")
         }
