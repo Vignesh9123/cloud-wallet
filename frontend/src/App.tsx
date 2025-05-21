@@ -1,16 +1,18 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
-import Home from "./components/Home"
 import { ThemeProvider } from "./context/theme-context"
 import Signup from "./components/Signup"
 import Signin from "./components/Signin"
 import { Toaster } from "sonner"
+import Home from "./components/Home"
 import Dashboard from "./components/Dashboard"
 import SendSolPage from "./components/SendSolPage"
+import AuthProvider from "./context/auth-context"
 function App() {
 
 
   return (
     <ThemeProvider>
+    <AuthProvider>
       <Router>
     <Routes>
       <Route path="/" element={<Home />} />
@@ -21,6 +23,7 @@ function App() {
     </Routes>
    </Router>
    <Toaster />
+   </AuthProvider>
     </ThemeProvider>
   )
 }

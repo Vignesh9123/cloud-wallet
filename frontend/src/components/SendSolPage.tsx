@@ -4,8 +4,10 @@ import { Button } from "./ui/button"
 import { Input } from "./ui/input"
 import axios from "axios"
 import { toast } from "sonner"
+import { useAuth } from "@/context/auth-context"
 
 function SendSolPage() {
+  const {user} = useAuth()
     const sendTxnToBackend = async (e: React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault()
         try {
@@ -24,13 +26,13 @@ function SendSolPage() {
           const {blockhash} = await connection.getLatestBlockhash()
           const transaction = new Transaction().add(
             SystemProgram.transfer({
-              fromPubkey: new PublicKey("9Qj3Su5uijFa6NPqHHRrRiFfJ8oKTZMjHqDQQ7oeJkwN"), //TODO: user.publicKey
+              fromPubkey: new PublicKey(user.publicKey), 
               toPubkey: new PublicKey(topubkey),
               lamports: parseFloat(amount) * LAMPORTS_PER_SOL
             })
           )
           transaction.recentBlockhash = blockhash
-          transaction.feePayer =  new PublicKey("9Qj3Su5uijFa6NPqHHRrRiFfJ8oKTZMjHqDQQ7oeJkwN") //TODO: user.publicKey
+          transaction.feePayer =  new PublicKey(user.publicKey) 
           const serializedTxn = transaction.serialize({
             requireAllSignatures: false,
             verifySignatures: false

@@ -82,7 +82,11 @@ app.post("/signin", async(req, res)=>{
             res.status(200).json({
                 message:"User signed in successfully",
                 publicKey: user.publicKey,
-                token
+                token,
+                user:{
+                    email: user.email,
+                    _id: user._id
+                }
             })
         }
     } catch (error) {

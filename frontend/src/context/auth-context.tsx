@@ -20,6 +20,8 @@ export default function AuthProvider({ children }: {children:React.ReactNode}) {
 
     const login = async(email: string, password: string) => {
         const response = await axios.post("http://localhost:3000/signin", { email, password })
+        localStorage.setItem("token", response.data.token)
+        setUser({...response.data.user, publicKey: response.data.publicKey})
         return response
     };
 
@@ -31,6 +33,7 @@ export default function AuthProvider({ children }: {children:React.ReactNode}) {
     const logout = async() => {
         const response = await axios.get("http://localhost:3000/signout")
         localStorage.clear()
+        setUser(null)
         return response
     }
     return(

@@ -1,8 +1,10 @@
 import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card"
-
+import { useAuth } from "@/context/auth-context"
 function Dashboard() {
+  const {user} = useAuth()
   return (
     <div className="flex flex-col justify-around gap-3 p-10">
+      {JSON.stringify(user)}
       <Card>
         <CardHeader>
           <CardTitle>Send Solana</CardTitle>
