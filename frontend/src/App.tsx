@@ -6,6 +6,8 @@ import { ThemeProvider } from "./context/theme-context"
 import Signup from "./components/Signup"
 import Signin from "./components/Signin"
 import { Toaster } from "sonner"
+import Dashboard from "./components/Dashboard"
+import SendSolPage from "./components/SendSolPage"
 function App() {
 
 
@@ -35,6 +37,8 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/sign-up" element={<Signup />} />
       <Route path="/sign-in" element={<Signin />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/send-sol" element={<SendSolPage />} />
     </Routes>
    </Router>
    <Toaster />

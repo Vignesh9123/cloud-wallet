@@ -2,8 +2,10 @@ import axios from "axios"
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
 import {toast} from "sonner"
+import { useNavigate } from "react-router-dom"
 
 function Signin() {
+  const navigate = useNavigate()
     const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
         try {
             e.preventDefault()
@@ -13,6 +15,7 @@ function Signin() {
             const response = await axios.post("http://localhost:3000/signin", { email, password })
             console.log(response)
             toast.success("Signed in Successfully")
+            navigate("/dashboard")
         } catch (error : any) {
             console.log(error)
             toast.error(error.response.data.message || "Something went wrong")
