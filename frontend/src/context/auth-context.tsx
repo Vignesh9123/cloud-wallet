@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 
 interface AuthContextProps {
@@ -25,8 +25,22 @@ export default function AuthProvider({ children }: {children:React.ReactNode}) {
         return response
     };
 
+    useEffect(() => {
+        const token = localStorage.getItem("token")
+        async function fetchUser() {
+            const response = await axios.get("http://localhost:3000/check-auth", {
+                headers:{
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+            console.log(response.data)
+            setUser({...response.data.user, publicKey: response.data.publicKey})
+        }
+        fetchUser()
+    }, [])
+
     const signup = async(email: string, password: string) => {
-        const response = await axios.post("http://localhost:3000/signin", { email, password })
+        const response = await axios.post("http://localhost:3000/signup", { email, password })
         return response
     }
 

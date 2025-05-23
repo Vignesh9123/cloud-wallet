@@ -37,7 +37,11 @@ function SendSolPage() {
             requireAllSignatures: false,
             verifySignatures: false
           })
-          const response = await axios.post("http://localhost:3000/sign-txn", {serializedTxn})
+          const response = await axios.post("http://localhost:3000/sign-txn", {serializedTxn}, {
+            headers:{
+                "Authorization": `Bearer ${localStorage.getItem("token")}`
+            }
+          })
           console.log(response)
         } catch (error: any) {
           console.log(error)
